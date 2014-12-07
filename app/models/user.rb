@@ -1,9 +1,5 @@
+require 'caminio/sky/sequel/plugins/secure_password'
+
 class Caminio::Sky::User < Sequel::Model
-
-  include Caminio::Sky::Model
-
-  define_columns do
-    String  :name
-  end
-
+  plugin :secure_password
 end

@@ -7,7 +7,7 @@
 /pkg/
 /spec/reports/
 /tmp/
-/db/
+/db/*.sqlite3
 *.bundle
 *.so
 *.o

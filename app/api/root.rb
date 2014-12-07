@@ -17,7 +17,9 @@ module Caminio
         enable_cors
 
         mount API::Users => '/users'
-        add_swagger_documentation mount_path: 'doc.json'
+        mount API::Auth => '/auth'
+
+        add_swagger_documentation mount_path: 'doc'
 
       end
 

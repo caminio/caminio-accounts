@@ -19,9 +19,10 @@ class Caminio::Sky::Application
   private
 
   def init_db
-    Sequel::Model.plugin(:schema)
+    Sequel::Model.plugin :schema
+    Sequel::Model.plugin :timestamps
+    Sequel::Model.plugin :json_serializer
     Sequel::Model.db = Sequel.sqlite( @config.db.database )
-    puts "db is #{@config.db.database}"
   end
 
 end

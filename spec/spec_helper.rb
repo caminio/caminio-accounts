@@ -1,8 +1,7 @@
 ENV['RACK_ENV'] = 'test'
 require 'bundler/setup'
+require 'rack/test'
 Bundler.setup
-
-require 'fileutils'
 
 require 'caminio/sky'
 Caminio::Sky::init
@@ -11,8 +10,13 @@ module RspecHelper
   module CaminioSkyHelper
 
     def cleanup
-      puts Caminio::Root.join('db')
-      # FileUtils::rm_rf spec_git_path
+      db_file = File::join('..','db','test.sqlite3')
+      return unless File::exists? db_file
+      File::delete db_file
+    end
+
+    def app
+      Caminio::Sky::API::Root
     end
 
   end
@@ -30,5 +34,6 @@ RSpec.configure do |config|
   end
 
   config.include RspecHelper::CaminioSkyHelper
+  config.include Rack::Test::Methods
 
 end
