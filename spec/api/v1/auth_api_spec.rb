@@ -7,7 +7,7 @@ describe Caminio::Sky::API::Auth do
   let(:user){ create(:user) }
 
   it "Authenticates with @login and @password" do
-    post '/auth', login: user.username, password: user.password
+    post '/api/v1/auth', login: user.username, password: user.password
     expect( last_response.status ).to be == 201
   end
 

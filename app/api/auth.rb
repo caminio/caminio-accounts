@@ -1,26 +1,32 @@
-class Caminio::Sky::API::Auth < Grape::API
+module Caminio::Sky::API
 
-  default_format :json
-  format :json
+  module AuthMethods
 
-  resource :auth do
-
-    desc "authenticates a user"
-    params do
-      requires :login, desc: "email address or username accepted"
-      requires :password, desc: "the user's password"
-    end
-    post do
-      authenticate_user!
-      {}
+    def authenticate_user
+      @current_user = Caminio::Sky::User
+              .where( "username=? OR email=?", params.login, params.login )
+              .first
+      return error!('InvalidCredentials',401) unless @current_user.authenticate( params.password )
     end
 
   end
 
-  helpers do
+  class Auth < Grape::API
 
-    def authenticate_user!
-      error!('Unauthorized',401)
+    helpers AuthMethods
+
+    resource :auth do
+
+      desc "authenticates a user"
+      params do
+        requires :login, desc: "email address or username accepted"
+        requires :password, desc: "the user's password"
+      end
+      post do
+        authenticate_user
+        @current_user
+      end
+
     end
 
   end

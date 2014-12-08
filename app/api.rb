@@ -7,8 +7,11 @@ module Caminio
       class Root < Grape::API
 
         desc "caminio-sky user and license management"
-        # prefix '/api/v1'
-        # helpers API::Helper
+        prefix '/api/v1'
+        helpers API::Helper
+
+        default_format :json
+        format :json
 
         mount API::Users
         mount API::Auth

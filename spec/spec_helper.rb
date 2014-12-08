@@ -1,4 +1,7 @@
 ENV['RACK_ENV'] = 'test'
+require 'simplecov'
+SimpleCov.start
+
 require 'bundler/setup'
 require 'rack/test'
 Bundler.setup
@@ -8,9 +11,7 @@ Caminio::Sky::init
 
 require 'active_record'
 ActiveRecord::Migrator.up 'db/migrate'
-# ActiveRecord::Migration.maintain_test_schema!
-# require 'database_cleaner'
-# DatabaseCleaner.strategy = :truncation
+# ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 require 'factory_girl'
 Dir.glob("#{File::expand_path '../factories', __FILE__}/*.rb").each do |file|
@@ -42,14 +43,7 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include FactoryGirl::Syntax::Methods
 
-  config.before(:suite) do
-    # begin
-      # load "#{Caminio::Sky.root}/db/schema.rb"
-      # DatabaseCleaner.start
-      # FactoryGirl.lint
-    # ensure
-    #   DatabaseCleaner.clean
-    # end
-  end
+  # config.before(:suite) do
+  # end
 
 end

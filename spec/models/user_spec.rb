@@ -17,9 +17,9 @@ describe Caminio::Sky::User do
 
     let(:user){ create(:user, username: 'test-update') }
 
-    it { expect(user.update( username: 'test2' )).to be_a(Caminio::Sky::User) }
-    it { expect(Caminio::Sky::User.first( username: 'test2' )).not_to be(nil) }
-    it { expect(Caminio::Sky::User.first( username: 'test-update' )).to be(nil) }
+    it { expect(user.update( username: 'test2' )).to be(true) }
+    it { expect(Caminio::Sky::User.find_by( username: 'test2' )).not_to be(nil) }
+    it { expect(Caminio::Sky::User.find_by( username: 'test-update' )).to be(nil) }
 
   end
 
@@ -28,7 +28,7 @@ describe Caminio::Sky::User do
     let(:user){ create(:user, username: 'test-delete') }
 
     it { expect(user.destroy).to be_a(Caminio::Sky::User) }
-    it { expect(Caminio::Sky::User.first( username: 'test-delete')).to be(nil) }
+    it { expect(Caminio::Sky::User.find_by( username: 'test-delete')).to be(nil) }
   end
 
 end
