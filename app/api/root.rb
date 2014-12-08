@@ -1,4 +1,3 @@
-require 'grape'
 require 'grape-swagger'
 
 module Caminio
@@ -7,19 +6,15 @@ module Caminio
 
       class Root < Grape::API
 
-        def self.enable_cors
-          before do
-            header['Access-Control-Allow-Origin'] = '*'
-            header['Access-Control-Request-Method'] = '*'
-          end
-        end
+        desc "caminio-sky user and license management"
+        version "v1"
 
-        enable_cors
+        helpers Caminio::Sky::API::Helper
 
         mount API::Users => '/users'
         mount API::Auth => '/auth'
 
-        add_swagger_documentation mount_path: 'doc'
+        add_swagger_documentation mount_path: 'doc', hide_documentation_path: true, api_version: self.version
 
       end
 

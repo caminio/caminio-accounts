@@ -2,8 +2,12 @@ require 'spec_helper'
 
 describe Caminio::Sky::API::Auth do
 
+  include Caminio::Sky
+
+  let(:user){ create(:user) }
+
   it "Authenticates with @login and @password" do
-    post '/auth', login: 'auth-test-username', password: 'auth-test-password'
+    post '/auth', login: user.username, password: user.password
     expect( last_response.status ).to be == 201
   end
 

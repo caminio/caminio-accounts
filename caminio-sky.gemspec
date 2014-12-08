@@ -23,9 +23,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'grape-swagger', '~> 0.8.0'
   spec.add_dependency 'hashie', '~> 3.3.2'
   spec.add_dependency 'puma', '~> 2.10.2'
-  spec.add_dependency 'guard-puma', '~> 0.3.1'
   spec.add_dependency 'bcrypt', '~> 3.1.9'
-  spec.add_dependency 'rack-test', '~> 0.6.2'
+  spec.add_dependency 'rack-cors', '~> 0.2.9'
+  
+  spec.add_development_dependency 'guard-puma', '~> 0.3.1'
+  spec.add_development_dependency 'rack-test', '~> 0.6.2'
+  spec.add_development_dependency 'factory_girl', '4.5.0'
+  spec.add_development_dependency 'database_cleaner', '1.3.0'
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"

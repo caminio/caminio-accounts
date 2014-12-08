@@ -1,3 +1,5 @@
+require "grape"
+
 require "caminio/sky/version"
 require "caminio/sky/env"
 require "caminio/sky/root"
