@@ -1,7 +1,15 @@
-module Caminio::Sky::Root
+module Caminio::Sky
 
-  def self.join( *opts )
+  def self.root
     File::join( Dir.pwd, opts )
+  end
+
+  module Root
+
+    def self.join( *opts )
+      File::join( Dir.pwd, opts )
+    end
+
   end
 
 end

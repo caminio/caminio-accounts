@@ -17,10 +17,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'sequel', '~> 4.17.0'
   spec.add_dependency 'sqlite3', '~> 1.3.10'
+  spec.add_dependency 'activerecord', '~> 4.1.8'
   spec.add_dependency 'grape', '~> 0.9.0'
-  spec.add_dependency 'grape-swagger', '~> 0.8.0'
+  spec.add_dependency 'grape-swagger', '0.7.2'
   spec.add_dependency 'hashie', '~> 3.3.2'
   spec.add_dependency 'puma', '~> 2.10.2'
   spec.add_dependency 'bcrypt', '~> 3.1.9'

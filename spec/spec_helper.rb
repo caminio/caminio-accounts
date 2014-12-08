@@ -3,15 +3,14 @@ require 'bundler/setup'
 require 'rack/test'
 Bundler.setup
 
-db_file = File::join( File::expand_path('../../db/test.sqlite3', __FILE__) )
-puts "db file is #{db_file}"
-File::delete db_file if File::exists? db_file
-
 require 'caminio/sky'
 Caminio::Sky::init
 
-require 'database_cleaner'
-DatabaseCleaner.strategy = :truncation
+require 'active_record'
+ActiveRecord::Migrator.up 'db/migrate'
+# ActiveRecord::Migration.maintain_test_schema!
+# require 'database_cleaner'
+# DatabaseCleaner.strategy = :truncation
 
 require 'factory_girl'
 Dir.glob("#{File::expand_path '../factories', __FILE__}/*.rb").each do |file|
@@ -44,12 +43,13 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
-    begin
-      DatabaseCleaner.start
-      FactoryGirl.lint
-    ensure
-      DatabaseCleaner.clean
-    end
+    # begin
+      # load "#{Caminio::Sky.root}/db/schema.rb"
+      # DatabaseCleaner.start
+      # FactoryGirl.lint
+    # ensure
+    #   DatabaseCleaner.clean
+    # end
   end
 
 end

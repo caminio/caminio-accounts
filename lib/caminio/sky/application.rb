@@ -1,6 +1,6 @@
 require "yaml"
 require "hashie"
-require "sequel"
+require "active_record"
 
 class Caminio::Sky::Application
 
@@ -19,10 +19,7 @@ class Caminio::Sky::Application
   private
 
   def init_db
-    Sequel::Model.plugin :schema
-    Sequel::Model.plugin :timestamps
-    Sequel::Model.plugin :json_serializer
-    Sequel::Model.db = Sequel.sqlite( @config.db.database )
+    ActiveRecord::Base.establish_connection( @config.db )
   end
 
 end

@@ -1,5 +1,3 @@
-require 'caminio/sky/sequel/plugins/secure_password'
-
-class Caminio::Sky::User < Sequel::Model
-  plugin :secure_password
+class Caminio::Sky::User < ActiveRecord::Base
+  has_secure_password
 end
