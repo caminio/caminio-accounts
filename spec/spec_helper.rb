@@ -14,6 +14,7 @@ require 'active_record'
 ActiveRecord::Migrator.up 'db/migrate'
 # ActiveRecord::Base.logger = Logger.new(STDOUT)
 
+require 'request_store'
 require 'database_cleaner'
 
 require 'factory_girl'
@@ -25,7 +26,10 @@ module RspecHelper
   module CaminioSkyHelper
 
     def app
-      Caminio::Sky::API::Root
+      Rack::Builder.new do
+        use RequestStore::Middleware
+        run Caminio::Sky::API::Root
+      end
     end
 
     def json

@@ -69,4 +69,41 @@ describe Caminio::Sky::API::Users do
 
   end
 
+  describe "POST /users" do
+
+    before :each do
+      @admin = create(:user, role: 'admin')
+      header 'Authorization', "Bearer #{@admin.create_access_token.token}"
+    end
+
+    let(:url){ '/api/v1/users' }
+    let(:error_400){ 'user is missing, user[email] is missing' }
+    let(:post_attr){ { user: { email: 'test@example.com', username: 'test' } } }
+
+    describe "requires" do
+
+      it { post(url); expect( last_response.status ).to be == 400 }
+
+      it { post(url); expect( json.error ).to be == error_400 }
+
+      it { post(url, { user: { } } ); expect( json.error ).to be == error_400 }
+
+    end
+
+    describe "returns user" do
+      
+      before :each do
+        post url, post_attr 
+      end
+
+      it{ expect( last_response.status ).to be == 201 }
+
+      it{ expect( json ).to have_key :user }
+
+      it{ puts last_response.body.inspect; expect( json.user.id ).to be >= 0 }
+
+    end
+
+  end
+
 end

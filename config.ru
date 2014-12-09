@@ -1,6 +1,8 @@
 require 'caminio/sky'
 require 'rack/cors'
+require 'request_store'
 
+use RequestStore::Middleware
 use Rack::Cors do
   allow do
     origins '*'

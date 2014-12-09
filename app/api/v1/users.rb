@@ -35,6 +35,24 @@ class Caminio::Sky::API::Users < Grape::API
       end
     end
 
+    #
+    # POST /
+    #
+    desc "create a new user within the new group"
+    params do
+      requires :user, type: Hash do
+        requires :email
+        optional :username
+        optional :firstname
+        optional :lastname
+        optional :password
+        optional :role, values: ['user','admin'], default: 'user'
+      end
+    end
+    post do
+      Caminio::Sky::User.create( declared(params)[:user] )
+    end
+
   end
 
 end
