@@ -1,5 +1,6 @@
 ENV['RACK_ENV'] = 'test'
 require 'simplecov'
+require 'hashie'
 SimpleCov.start
 
 require 'bundler/setup'
@@ -12,6 +13,8 @@ Caminio::Sky::init
 require 'active_record'
 ActiveRecord::Migrator.up 'db/migrate'
 # ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+require 'database_cleaner'
 
 require 'factory_girl'
 Dir.glob("#{File::expand_path '../factories', __FILE__}/*.rb").each do |file|
@@ -26,7 +29,7 @@ module RspecHelper
     end
 
     def json
-      JSON.parse last_response.body
+      Hashie::Mash.new( JSON.parse last_response.body )
     end
 
   end
@@ -47,7 +50,15 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include FactoryGirl::Syntax::Methods
 
-  # config.before(:suite) do
-  # end
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
 
 end

@@ -9,6 +9,10 @@ module Caminio::Sky
       create_access_token
     end
 
+    def is_admin?
+      role == 'admin'
+    end
+
   end
 
 end

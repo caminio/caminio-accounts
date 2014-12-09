@@ -1,6 +1,7 @@
 require "grape"
-require "grape-entity"
 require "active_record"
+require "active_model_serializers"
+require 'grape-active_model_serializers'
 
 require "caminio/sky/version"
 require "caminio/sky/env"
@@ -21,7 +22,7 @@ module Caminio::Sky
 
   def self.load_app_files
     dir = File::expand_path '../../../app', __FILE__
-    Dir.glob( "#{dir}/{helpers,api,models,entities}/**/*.rb" ).each do |file|
+    Dir.glob( "#{dir}/{helpers,api,models,serializers}/**/*.rb" ).each do |file|
       require file
     end
     require "#{dir}/api"

@@ -27,7 +27,7 @@ module Caminio::Sky::API
       end
       post do
         authenticate_user
-        present @current_user.access_token, with: Entities::AccessToken
+        present @current_user.access_token, root: :access_token
       end
 
     end
