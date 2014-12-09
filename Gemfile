@@ -5,3 +5,5 @@ gem 'gemrat'
 gemspec
 
 gem 'simplecov', :require => false, :group => :test
+
+gem 'grape-entity', '0.4.4'

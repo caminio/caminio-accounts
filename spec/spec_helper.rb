@@ -25,6 +25,10 @@ module RspecHelper
       Caminio::Sky::API::Root
     end
 
+    def json
+      JSON.parse last_response.body
+    end
+
   end
 end
 

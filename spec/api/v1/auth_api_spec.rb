@@ -6,14 +6,62 @@ describe Caminio::Sky::API::Auth do
 
   let(:user){ create(:user) }
 
-  it "Authenticates with @login and @password" do
+  it "@username and @password" do
     post '/api/v1/auth', login: user.username, password: user.password
     expect( last_response.status ).to be == 201
+    expect( last_response.content_type ).to eq('application/json')
+  end
+
+  it "@email and @password" do
+    post '/api/v1/auth', login: user.email, password: user.password
+    expect( last_response.status ).to be == 201
+  end
+
+  it "fails with @password+1 char" do
+    post '/api/v1/auth', login: user.email, password: "#{user.password}x"
+    expect( last_response.status ).to be == 401
+    expect( last_response.content_type ).to eq('application/json')
+    expect( json ).to have_key('error')
   end
 
   it "fails with wrong login" do
     post '/api/v1/auth', login: 'invalid', password: user.password
     expect( last_response.status ).to be == 401
+  end
+
+  it "fails with wrong password" do
+    post '/api/v1/auth', login: user.username, password: 'invalid'
+    expect( last_response.status ).to be == 401
+  end
+
+  it "fails with wrong login and password" do
+    post '/api/v1/auth', login: 'invalid', password: 'invalid'
+    expect( last_response.status ).to be == 401
+  end
+
+  describe "returns an access token" do
+
+    before :all do
+      user = create :user
+      post '/api/v1/auth', login: user.username, password: user.password
+    end
+
+    it{ expect( json ).to have_key('access_token') }
+    it{ expect( json['access_token'] ).to have_key('token') }
+    it{ expect( json['access_token'] ).to have_key('expires_at') }
+
+    describe "token length" do
+  
+      it{ expect( json['access_token']['token'].size ).to eq(32) }
+
+    end
+
+    describe "expiration date" do
+      it{ expect( Time.parse(json['access_token']['expires_at']) ).to be >= (7*60+59).minutes.from_now }
+      it{ expect( Time.parse(json['access_token']['expires_at']) ).to be <= (8*60+1).minutes.from_now }
+
+    end
+
   end
 
 end
