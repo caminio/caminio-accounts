@@ -25,7 +25,7 @@ describe Caminio::Sky::API::Users do
 
   end
 
-  describe "/user/:id" do
+  describe "/users/:id" do
 
     before :each do
       @user = create(:user)
@@ -33,10 +33,39 @@ describe Caminio::Sky::API::Users do
       header 'Authorization', "Bearer #{@user.create_access_token.token}"
     end
 
-    it "does not return password_digest as part of json" do
+    it "returns a user json" do
       get @url
       expect( last_response.status ).to be == 200
+      expect( json ).to have_key(:user)
     end
+
+    describe "json return properties" do
+
+      before :each do
+        get "/api/v1/users/#{@user.id}"
+      end
+
+      it{ expect( json.user ).to have_key(:id) }
+      it{ expect( json.user ).to have_key(:username) }
+      it{ expect( json.user ).to have_key(:firstname) }
+      it{ expect( json.user ).to have_key(:lastname) }
+      it{ expect( json.user ).to have_key(:email) }
+      it{ expect( json.user ).to have_key(:role) }
+      it{ expect( json.user ).not_to have_key(:password_digest) }
+
+    end
+
+  end
+
+  describe "/users/current" do
+
+    before :each do
+      @user = create(:user)
+      header 'Authorization', "Bearer #{@user.create_access_token.token}"
+      get '/api/v1/users/current'
+    end
+
+    it{ expect( json.user.id ).to be == @user.id }
 
   end
 

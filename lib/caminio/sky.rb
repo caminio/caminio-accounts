@@ -9,6 +9,9 @@ require "caminio/sky/root"
 require "caminio/sky/application"
 require "caminio/sky/migration"
 
+# disable annoying active record message
+I18n.enforce_available_locales = false
+
 module Caminio::Sky
 
   # define API for app/api files to be loaded in load_app_files

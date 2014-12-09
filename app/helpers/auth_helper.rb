@@ -12,7 +12,6 @@ module Caminio::Sky::API
       elsif params.api_key
         token = params.api_key
       end
-      logger.info "having token #{token}"
       error!('MissingTokenOrApiKey', 409) unless token
       return false unless @token = Caminio::Sky::AccessToken.find_by( token: token )
       @token.expires_at > Time.now
