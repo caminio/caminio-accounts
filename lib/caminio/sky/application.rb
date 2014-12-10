@@ -1,6 +1,7 @@
 require "yaml"
 require "hashie"
 require "active_record"
+require "i18n"
 
 class Caminio::Sky::Application
 

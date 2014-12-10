@@ -12,7 +12,6 @@ module Caminio
 
         default_format :json
         format :json
-        formatter :json, Grape::Formatter::ActiveModelSerializers
 
         mount API::Users
         mount API::Auth

@@ -8,6 +8,8 @@ module Caminio::Sky
     before_create :create_membership_for_organization
     before_validation :set_password_if_blank
 
+    attr_accessor :organization_id
+
     def aquire_access_token
       AccessToken.where( user_id: id ).delete_all
       create_access_token
@@ -25,8 +27,12 @@ module Caminio::Sky
     private
 
     def create_membership_for_organization
-      return unless org_id = RequestStore.store[:organization_id]
-      organizations << Organization.find( org_id )
+      if organization = Organization.find_by( id: organization_id )
+        organizations << organization
+        return
+      elsif org_id = RequestStore.store[:organization_id]
+        organizations << Organization.find( org_id )
+      end
     end
 
     def set_password_if_blank

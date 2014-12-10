@@ -90,4 +90,11 @@ describe Caminio::Sky::User do
 
   end
 
+  describe "locale" do
+
+    let!(:user){ create(:user) }
+    it{ expect( user.locale ).to eq I18n.default_locale.to_s }
+
+  end
+
 end

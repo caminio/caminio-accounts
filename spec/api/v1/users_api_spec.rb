@@ -100,9 +100,68 @@ describe Caminio::Sky::API::Users do
 
       it{ expect( json ).to have_key :user }
 
-      it{ puts last_response.body.inspect; expect( json.user.id ).to be >= 0 }
+    end
+
+    describe "no organization" do
+
+      before :each do 
+        post url, post_attr
+      end
+
+      it{ expect( json.user.organization_ids.size ).to be == 0 }
 
     end
+
+    describe "with organization" do
+
+      before :each do
+        @org = Caminio::Sky::Organization.create name: 'test-org'
+        post url, user: { email: 'test@example.com', organization_id: @org.id }
+      end
+
+      it { expect( json.user.organization_ids.size ).to be == 1 }
+
+    end
+
+  end
+
+  describe "PUT /:id" do
+
+    before :each do
+      @admin = create(:user, role: 'admin')
+      @user = create(:user)
+      header 'Authorization', "Bearer #{@admin.create_access_token.token}"
+    end
+
+    describe "update" do
+
+      let(:url){ "/api/v1/users/#{@user.id}" }
+
+      describe "email" do
+
+        before :each do
+          put url, { user: { email: 'new@example.com' } }
+        end
+
+        it { expect( json.user.email ).to eq('new@example.com') }
+
+      end
+
+    end
+
+  end
+
+  describe "DELETE /:id" do
+
+    before :each do
+      @admin = create(:user, role: 'admin')
+      @user = create(:user)
+      header 'Authorization', "Bearer #{@admin.create_access_token.token}"
+      delete "/api/v1/users/#{@user.id}"
+    end
+
+    it{ expect( last_response.status ).to be == 200 }
+    it{ expect( json ).to eq({}) }
 
   end
 

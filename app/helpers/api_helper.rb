@@ -4,8 +4,4 @@ module Caminio::Sky::API::Helper
     Caminio::Sky::API::Root.logger
   end
 
-  def users
-    users = Arel::Table.new(:users)
-  end
-
 end

@@ -1,7 +1,18 @@
 class Caminio::Sky::API::Users < Grape::API
 
   helpers Caminio::Sky::API::AuthHelper
+  helpers do
+
+    def user_params
+      user_params = declared(params)[:user]
+      user_params.delete(:organization_id) unless current_user.is_admin?
+      user_params
+    end
+
+  end
+
   before{ authenticate! }
+  formatter :json, Grape::Formatter::ActiveModelSerializers
 
   resource :users do
 
@@ -46,11 +57,41 @@ class Caminio::Sky::API::Users < Grape::API
         optional :firstname
         optional :lastname
         optional :password
+        optional :organization_id
         optional :role, values: ['user','admin'], default: 'user'
       end
     end
     post do
-      Caminio::Sky::User.create( declared(params)[:user] )
+      Caminio::Sky::User.create( user_params )
+    end
+
+    #
+    # PUT /:id
+    #
+    desc "update an existing user"
+    params do
+      requires :user, type: Hash do
+        optional :email
+        optional :username
+        optional :firstname
+        optional :lastname
+        optional :password
+        optional :organization_id
+        optional :role, values: ['user','admin'], default: 'user'
+      end
+    end
+    put '/:id' do
+      Caminio::Sky::User.update( params.id, user_params )
+      Caminio::Sky::User.find( params.id )
+    end
+
+    #
+    # DELETE /:id
+    #
+    desc "delete an existing user"
+    formatter :json, lambda{ |o,env| "{}" }
+    delete '/:id' do
+      Caminio::Sky::User.destroy( params.id )
     end
 
   end

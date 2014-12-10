@@ -14,6 +14,7 @@ module Caminio::Sky::API
 
   class Auth < Grape::API
 
+    formatter :json, Grape::Formatter::ActiveModelSerializers
     helpers AuthMethods
 
     resource :auth do
@@ -27,7 +28,7 @@ module Caminio::Sky::API
       end
       post do
         authenticate_user
-        present @current_user.access_token, root: :access_token
+        @current_user.access_token
       end
 
     end
