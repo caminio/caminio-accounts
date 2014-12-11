@@ -67,6 +67,22 @@ class Caminio::Sky::API::Users < Grape::API
     end
 
     #
+    # POST /change_password
+    #
+    desc "changes the password for the current user"
+    params do
+      requires :old, desc: "the current password"
+      requires :new, desc: "the new password"
+    end
+    post '/change_password' do
+      user = Caminio::Sky::User.find( @token.user_id )
+      return error("password failed",403) unless user.authenticate( params.old )
+      user.password = params.new
+      return error("failed to save", 422) unless user.save
+      Caminio::Sky::User.find( @token.user_id )
+    end
+
+    #
     # PUT /:id
     #
     desc "update an existing user"

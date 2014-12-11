@@ -165,4 +165,40 @@ describe Caminio::Sky::API::Users do
 
   end
 
+  describe "POST /change_password" do
+
+    before :each do
+      @user = create(:user, username: 'test', password: 'test-old')
+      header 'Authorization', "Bearer #{@user.create_access_token.token}"
+      post "/api/v1/users/change_password", old: 'test-old', new: 'test-new'
+    end
+
+    it { expect(last_response.status).to be == 201 }
+
+    describe "can log in with new password" do
+
+      before :each do
+        post "/api/v1/auth", login: 'test', password: 'test-new'
+      end
+
+      it { expect(last_response.status).to be == 201 }
+      it { expect(json).to have_key(:access_token) }
+      it { expect(json.access_token).to have_key(:token) }
+
+    end
+
+    describe "can't log in with old password" do
+
+      before :each do
+        post "/api/v1/auth", login: 'test', password: 'test-old'
+      end
+
+      it { expect(last_response.status).to be == 401 }
+      it { expect(json).not_to have_key(:access_token) }
+      it { expect(json).to have_key(:error) }
+      it { expect(json.error).to eq("InvalidCredentials") }
+
+    end
+  end
+
 end
