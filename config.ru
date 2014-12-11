@@ -2,7 +2,11 @@ require 'caminio/sky'
 require 'rack/cors'
 require 'request_store'
 
+require 'active_record'
+use ActiveRecord::ConnectionAdapters::ConnectionManagement
+
 use RequestStore::Middleware
+
 use Rack::Cors do
   allow do
     origins '*'

@@ -12,6 +12,7 @@ class Caminio::Sky::API::Users < Grape::API
   end
 
   before{ authenticate! }
+
   formatter :json, Grape::Formatter::ActiveModelSerializers
 
   resource :users do

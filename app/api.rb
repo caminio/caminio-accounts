@@ -15,6 +15,7 @@ module Caminio
 
         mount API::Users
         mount API::Auth
+        mount API::Initial
 
         add_swagger_documentation mount_path: '/doc', hide_documentation_path: true
 
