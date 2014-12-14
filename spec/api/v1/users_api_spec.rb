@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Caminio::Sky::API::Users do
+describe Caminio::Accounts::API::Users do
 
   describe "authentication" do
 
@@ -115,7 +115,7 @@ describe Caminio::Sky::API::Users do
     describe "with organization" do
 
       before :each do
-        @org = Caminio::Sky::Organization.create name: 'test-org'
+        @org = Caminio::Organization.create name: 'test-org'
         post url, user: { email: 'test@example.com', organization_id: @org.id }
       end
 

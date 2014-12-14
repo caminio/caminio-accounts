@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-describe Caminio::Sky::Application do
+describe Caminio::Accounts::Application do
 
   it "Application root" do
-    expect( Caminio::Sky::Root.join ).to eq( File::join(Dir.pwd,'') )
+    expect( Caminio::Accounts::Root.join ).to eq( File::join(Dir.pwd,'') )
   end
 
   it "reads configuration" do
-    expect( Caminio::Sky::Application.config ).to have_key(:db)
+    expect( Caminio::Accounts::Application.config ).to have_key(:db)
   end
 
   it "initializes with correct env" do
-    expect( Caminio::Sky::env ).to eq('test')
+    expect( Caminio::Accounts::env ).to eq('test')
   end
 
 end

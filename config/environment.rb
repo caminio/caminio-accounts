@@ -1,2 +1,2 @@
-class CaminioSkyApplication < Caminio::Sky::Application
+class CaminioAccountsApplication < Caminio::Accounts::Application
 end

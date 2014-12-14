@@ -1,4 +1,4 @@
-module Caminio::Sky::API
+module Caminio::Accounts::API
   
   class Initial < Grape::API
 
@@ -15,9 +15,9 @@ module Caminio::Sky::API
         requires :password
       end
       post :init do
-        return error!('SetupIsCompletedAlready',403) if Caminio::Sky::User.count > 0
-        org = Caminio::Sky::Organization.create( name: params.organization_name )
-        Caminio::Sky::User.create( organization_id: org.id, username: params.username, password: params.password, email: params.email )
+        return error!('SetupIsCompletedAlready',403) if Caminio::User.count > 0
+        org = Caminio::Organization.create( name: params.organization_name )
+        Caminio::User.create( organization_id: org.id, username: params.username, password: params.password, email: params.email )
       end
 
     end

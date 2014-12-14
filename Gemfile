@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 gem 'gemrat'
 
-# Specify your gem's dependencies in caminio-sky.gemspec
+# Specify your gem's dependencies in caminio-Accounts.gemspec
 gemspec

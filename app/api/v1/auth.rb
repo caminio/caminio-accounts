@@ -1,9 +1,9 @@
-module Caminio::Sky::API
+module Caminio::Accounts::API
 
   module AuthMethods
 
     def authenticate_user
-      @current_user = Caminio::Sky::User
+      @current_user = Caminio::User
               .where( "username=? OR email=?", params.login, params.login )
               .first
       return error!('InvalidCredentials',401) unless @current_user && @current_user.authenticate( params.password )

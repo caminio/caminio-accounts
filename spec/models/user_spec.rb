@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe Caminio::Sky::User do
+describe Caminio::User do
 
   describe "create" do
   
     let!(:user){ create(:user) }
 
-    it { expect(user).to be_a(Caminio::Sky::User) }
+    it { expect(user).to be_a(Caminio::User) }
     it { expect(user.username).to eq('johndoe') }
-    it { expect(Caminio::Sky::User.where( username: 'johndoe' ).first ).not_to be(nil) }
-    it { expect(Caminio::Sky::User.where( username: 'johndoe' ).first ).to be_a(Caminio::Sky::User) }
+    it { expect(Caminio::User.where( username: 'johndoe' ).first ).not_to be(nil) }
+    it { expect(Caminio::User.where( username: 'johndoe' ).first ).to be_a(Caminio::User) }
 
   end
 
@@ -21,8 +21,8 @@ describe Caminio::Sky::User do
       user
     end
 
-    it { expect(Caminio::Sky::User.find_by( username: 'test2' )).not_to be(nil) }
-    it { expect(Caminio::Sky::User.find_by( username: 'test-update' )).to be(nil) }
+    it { expect(Caminio::User.find_by( username: 'test2' )).not_to be(nil) }
+    it { expect(Caminio::User.find_by( username: 'test-update' )).to be(nil) }
 
   end
 
@@ -33,7 +33,7 @@ describe Caminio::Sky::User do
       user.destroy
     end
 
-    it { expect(Caminio::Sky::User.find_by( username: 'test-delete')).to be(nil) }
+    it { expect(Caminio::User.find_by( username: 'test-delete')).to be(nil) }
 
   end
 
@@ -45,7 +45,7 @@ describe Caminio::Sky::User do
       
       let!(:api_key){ user.aquire_api_key }
 
-      it { expect( api_key ).to be_a(Caminio::Sky::ApiKey) }
+      it { expect( api_key ).to be_a(Caminio::ApiKey) }
 
       it { expect( api_key.token.size ).to eq(32) }
 
@@ -58,7 +58,7 @@ describe Caminio::Sky::User do
         it "only finds one valid token" do
           new_token = user.aquire_api_key
           expect( new_token.id ).not_to eq( api_key.id )
-          expect( Caminio::Sky::ApiKey.find_by( id: api_key.id ) ).to be(nil)
+          expect( Caminio::ApiKey.find_by( id: api_key.id ) ).to be(nil)
         end
 
       end

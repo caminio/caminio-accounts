@@ -1,6 +1,6 @@
 require 'securerandom'
 
-module Caminio::Sky
+module Caminio
 
   class ApiKey < ActiveRecord::Base
 

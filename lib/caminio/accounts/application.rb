@@ -3,7 +3,7 @@ require "hashie"
 require "active_record"
 require "i18n"
 
-class Caminio::Sky::Application
+class Caminio::Accounts::Application
 
   def self.config
     @@config
@@ -11,8 +11,8 @@ class Caminio::Sky::Application
 
   def initialize
     @config = Hashie::Mash.new
-    db_config_file = Caminio::Sky::Root.join( 'config', 'database.yml' )
-    @config.db = Hashie::Mash.new YAML::load_file( db_config_file )[Caminio::Sky::env]
+    db_config_file = Caminio::Accounts::Root.join( 'config', 'database.yml' )
+    @config.db = Hashie::Mash.new YAML::load_file( db_config_file )[Caminio::Accounts::env]
     @@config = @config
     init_db
   end

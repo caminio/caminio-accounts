@@ -1,5 +1,5 @@
 module Caminio
-  module Sky
+  module Accounts
     def self.env
       ENV['RACK_ENV'] || 'development'
     end

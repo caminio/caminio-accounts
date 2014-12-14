@@ -1,7 +1,7 @@
-module Caminio::Sky::API::Helper
+module Caminio::Accounts::API::Helper
 
   def logger
-    Caminio::Sky::API::Root.logger
+    Caminio::Accounts::API::Root.logger
   end
 
 end

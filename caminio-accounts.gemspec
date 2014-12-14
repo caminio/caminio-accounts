@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'caminio/sky/version'
+require 'caminio/accounts/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "caminio-sky"
-  spec.version       = Caminio::Sky::VERSION
+  spec.name          = "caminio-accounts"
+  spec.version       = Caminio::Accounts::VERSION
   spec.authors       = ["thorsten zerha"]
   spec.email         = ["thorsten.zerha@tastenwerk.com"]
   spec.summary       = %q{API for user authentication and license management}

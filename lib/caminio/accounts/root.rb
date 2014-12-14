@@ -1,4 +1,4 @@
-module Caminio::Sky
+module Caminio::Accounts
 
   def self.root
     File::join( Dir.pwd, opts )

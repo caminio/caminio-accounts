@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Caminio::Sky::API::Auth do
+describe Caminio::Accounts::API::Auth do
 
-  include Caminio::Sky
+  include Caminio::Accounts
 
   let(:user){ create(:user) }
 

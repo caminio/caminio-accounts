@@ -1,6 +1,6 @@
-class Caminio::Sky::API::Users < Grape::API
+class Caminio::Accounts::API::Users < Grape::API
 
-  helpers Caminio::Sky::API::AuthHelper
+  helpers Caminio::Accounts::API::AuthHelper
   helpers do
 
     def user_params
@@ -22,7 +22,7 @@ class Caminio::Sky::API::Users < Grape::API
     #
     desc "lists all users"
     get do
-      Caminio::Sky::User.where({})
+      Caminio::User.where({})
     end
 
     #
@@ -30,7 +30,7 @@ class Caminio::Sky::API::Users < Grape::API
     #
     desc "return user relation of current token"
     get '/current' do
-      Caminio::Sky::User.find( @token.user_id )
+      Caminio::User.find( @token.user_id )
     end
 
     #
@@ -43,7 +43,7 @@ class Caminio::Sky::API::Users < Grape::API
     route_param :id do
       get do
         error!('InsufficientRights', 403) unless params.id == @token.user_id || @token.user.is_admin?
-        Caminio::Sky::User.find_by(id: params.id)
+        Caminio::User.find_by(id: params.id)
       end
     end
 
@@ -64,7 +64,7 @@ class Caminio::Sky::API::Users < Grape::API
       end
     end
     post do
-      Caminio::Sky::User.create( user_params )
+      Caminio::User.create( user_params )
     end
 
     #
@@ -76,11 +76,11 @@ class Caminio::Sky::API::Users < Grape::API
       requires :new, desc: "the new password"
     end
     post '/change_password' do
-      user = Caminio::Sky::User.find( @token.user_id )
+      user = Caminio::User.find( @token.user_id )
       return error!("WrongPassword",403) unless user.authenticate( params.old )
       user.password = params.new
       return error("failed to save", 422) unless user.save
-      Caminio::Sky::User.find( @token.user_id )
+      Caminio::User.find( @token.user_id )
     end
 
     #
@@ -99,8 +99,8 @@ class Caminio::Sky::API::Users < Grape::API
       end
     end
     put '/:id' do
-      Caminio::Sky::User.update( params.id, user_params )
-      Caminio::Sky::User.find( params.id )
+      Caminio::User.update( params.id, user_params )
+      Caminio::User.find( params.id )
     end
 
     #
@@ -109,7 +109,7 @@ class Caminio::Sky::API::Users < Grape::API
     desc "delete an existing user"
     formatter :json, lambda{ |o,env| "{}" }
     delete '/:id' do
-      Caminio::Sky::User.destroy( params.id )
+      Caminio::User.destroy( params.id )
     end
 
   end

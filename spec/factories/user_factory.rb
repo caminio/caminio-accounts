@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user, class: 'Caminio::Sky::User' do
+  factory :user, class: 'Caminio::User' do
     firstname "John"
     lastname  "Doe"
     username "johndoe"

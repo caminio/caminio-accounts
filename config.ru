@@ -1,4 +1,4 @@
-require 'caminio/sky'
+require 'caminio/Accounts'
 require 'rack/cors'
 require 'request_store'
 
@@ -14,6 +14,6 @@ use Rack::Cors do
   end
 end
 
-Caminio::Sky.init
+Caminio::Accounts.init
 
-map('/') { run Caminio::Sky::API::Root }
+map('/') { run Caminio::Accounts::API::Root }

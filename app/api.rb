@@ -1,12 +1,12 @@
 require 'grape-swagger'
 
 module Caminio
-  module Sky
+  module Accounts
     module API
 
       class Root < Grape::API
 
-        desc "caminio-sky user and license management"
+        desc "caminio-Accounts user and license management"
         prefix '/api/v1'
         helpers API::Helper
 

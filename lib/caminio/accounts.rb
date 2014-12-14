@@ -3,15 +3,15 @@ require "active_record"
 require "active_model_serializers"
 require 'grape-active_model_serializers'
 
-require "caminio/sky/version"
-require "caminio/sky/env"
-require "caminio/sky/root"
-require "caminio/sky/application"
+require "caminio/accounts/version"
+require "caminio/accounts/env"
+require "caminio/accounts/root"
+require "caminio/accounts/application"
 
 # disable annoying active record message
 I18n.enforce_available_locales = false
 
-module Caminio::Sky
+module Caminio::Accounts
 
   # define API for app/api files to be loaded in load_app_files
   module API
