@@ -2,7 +2,7 @@ module Caminio::Sky
 
   class User < ActiveRecord::Base
     has_secure_password
-    has_one :access_token, dependent: :delete
+    has_one :api_key, dependent: :delete
     has_and_belongs_to_many :organizations
 
     before_create :create_membership_for_organization
@@ -10,9 +10,9 @@ module Caminio::Sky
 
     attr_accessor :organization_id
 
-    def aquire_access_token
-      AccessToken.where( user_id: id ).delete_all
-      create_access_token
+    def aquire_api_key
+      ApiKey.where( user_id: id ).delete_all
+      create_api_key
     end
 
     def is_admin?

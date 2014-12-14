@@ -17,7 +17,7 @@ module Caminio::Sky::API
         token = params.api_key
       end
       error!('MissingTokenOrApiKey', 401) unless token
-      return false unless @token = Caminio::Sky::AccessToken.find_by( token: token )
+      return false unless @token = Caminio::Sky::ApiKey.find_by( token: token )
       @token.expires_at > Time.now
     end
 

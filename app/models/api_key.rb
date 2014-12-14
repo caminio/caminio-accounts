@@ -2,7 +2,7 @@ require 'securerandom'
 
 module Caminio::Sky
 
-  class AccessToken < ActiveRecord::Base
+  class ApiKey < ActiveRecord::Base
 
     belongs_to :user
 

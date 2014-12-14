@@ -37,28 +37,28 @@ describe Caminio::Sky::User do
 
   end
 
-  describe "access_token" do
+  describe "api_key" do
 
     let!(:user){ create(:user) }
 
     describe "creates a new access token" do
       
-      let!(:access_token){ user.aquire_access_token }
+      let!(:api_key){ user.aquire_api_key }
 
-      it { expect( access_token ).to be_a(Caminio::Sky::AccessToken) }
+      it { expect( api_key ).to be_a(Caminio::Sky::ApiKey) }
 
-      it { expect( access_token.token.size ).to eq(32) }
+      it { expect( api_key.token.size ).to eq(32) }
 
-      it { expect( access_token.expires_at ).to be >= (8*60-1).minutes.from_now }
+      it { expect( api_key.expires_at ).to be >= (8*60-1).minutes.from_now }
 
-      it { expect( access_token.expires_at ).to be <= (8*60+1).minutes.from_now }
+      it { expect( api_key.expires_at ).to be <= (8*60+1).minutes.from_now }
 
-      describe "invalidates old access_token if new is aquired" do
+      describe "invalidates old api_key if new is aquired" do
 
         it "only finds one valid token" do
-          new_token = user.aquire_access_token
-          expect( new_token.id ).not_to eq( access_token.id )
-          expect( Caminio::Sky::AccessToken.find_by( id: access_token.id ) ).to be(nil)
+          new_token = user.aquire_api_key
+          expect( new_token.id ).not_to eq( api_key.id )
+          expect( Caminio::Sky::ApiKey.find_by( id: api_key.id ) ).to be(nil)
         end
 
       end

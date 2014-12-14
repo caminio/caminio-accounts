@@ -59,6 +59,7 @@ class Caminio::Sky::API::Users < Grape::API
         optional :lastname
         optional :password
         optional :organization_id
+        optional :valid_until
         optional :role, values: ['user','admin'], default: 'user'
       end
     end
@@ -76,7 +77,7 @@ class Caminio::Sky::API::Users < Grape::API
     end
     post '/change_password' do
       user = Caminio::Sky::User.find( @token.user_id )
-      return error("password failed",403) unless user.authenticate( params.old )
+      return error!("WrongPassword",403) unless user.authenticate( params.old )
       user.password = params.new
       return error("failed to save", 422) unless user.save
       Caminio::Sky::User.find( @token.user_id )

@@ -1,7 +1,7 @@
-class CreateAccessTokens < ActiveRecord::Migration
+class CreateApiKeys < ActiveRecord::Migration
 
   def up
-    create_table :access_tokens do |t|
+    create_table :api_keys do |t|
       t.string      :token
       t.datetime    :expires_at
       t.references  :user
@@ -10,7 +10,7 @@ class CreateAccessTokens < ActiveRecord::Migration
   end 
 
   def down
-    drop_table :access_tokens
+    drop_table :api_keys
   end
 
 end

@@ -46,19 +46,24 @@ describe Caminio::Sky::API::Auth do
       post '/api/v1/auth', login: user.username, password: user.password
     end
 
-    it{ expect( json ).to have_key('access_token') }
-    it{ expect( json['access_token'] ).to have_key('token') }
-    it{ expect( json['access_token'] ).to have_key('expires_at') }
+    it{ expect( json ).to have_key('api_key') }
+    it{ expect( json['api_key'] ).to have_key('token') }
+    it{ expect( json['api_key'] ).to have_key('expires_at') }
+    it{ expect( json['api_key'] ).to have_key('user_id') }
 
     describe "token length" do
   
-      it{ expect( json['access_token']['token'].size ).to eq(32) }
+      it{ expect( json['api_key']['token'].size ).to eq(32) }
 
     end
 
+    describe "user" do
+      it { expect( json['api_key']['user_id'] ).to eq(user.id)  }
+    end
+
     describe "expiration date" do
-      it{ expect( Time.parse(json['access_token']['expires_at']) ).to be >= (7*60+59).minutes.from_now }
-      it{ expect( Time.parse(json['access_token']['expires_at']) ).to be <= (8*60+1).minutes.from_now }
+      it{ expect( Time.parse(json['api_key']['expires_at']) ).to be >= (7*60+59).minutes.from_now }
+      it{ expect( Time.parse(json['api_key']['expires_at']) ).to be <= (8*60+1).minutes.from_now }
 
     end
 

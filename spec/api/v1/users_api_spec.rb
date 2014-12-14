@@ -7,7 +7,7 @@ describe Caminio::Sky::API::Users do
     before :each do
       @url = '/api/v1/users'
       @user = create(:user)
-      @token = @user.create_access_token
+      @token = @user.create_api_key
     end
 
     it "requires authentication" do
@@ -15,7 +15,7 @@ describe Caminio::Sky::API::Users do
       expect(last_response).not_to be_ok
     end
 
-    it "passes with valid access_token" do
+    it "passes with valid api_key" do
       header 'Authorization', "Bearer #{@token.token}"
       get @url
       expect(last_response).to be_ok
@@ -30,7 +30,7 @@ describe Caminio::Sky::API::Users do
     before :each do
       @user = create(:user)
       @url = "/api/v1/users/#{@user.id}"
-      header 'Authorization', "Bearer #{@user.create_access_token.token}"
+      header 'Authorization', "Bearer #{@user.create_api_key.token}"
     end
 
     it "returns a user json" do
@@ -61,7 +61,7 @@ describe Caminio::Sky::API::Users do
 
     before :each do
       @user = create(:user)
-      header 'Authorization', "Bearer #{@user.create_access_token.token}"
+      header 'Authorization', "Bearer #{@user.create_api_key.token}"
       get '/api/v1/users/current'
     end
 
@@ -73,7 +73,7 @@ describe Caminio::Sky::API::Users do
 
     before :each do
       @admin = create(:user, role: 'admin')
-      header 'Authorization', "Bearer #{@admin.create_access_token.token}"
+      header 'Authorization', "Bearer #{@admin.create_api_key.token}"
     end
 
     let(:url){ '/api/v1/users' }
@@ -130,7 +130,7 @@ describe Caminio::Sky::API::Users do
     before :each do
       @admin = create(:user, role: 'admin')
       @user = create(:user)
-      header 'Authorization', "Bearer #{@admin.create_access_token.token}"
+      header 'Authorization', "Bearer #{@admin.create_api_key.token}"
     end
 
     describe "update" do
@@ -156,7 +156,7 @@ describe Caminio::Sky::API::Users do
     before :each do
       @admin = create(:user, role: 'admin')
       @user = create(:user)
-      header 'Authorization', "Bearer #{@admin.create_access_token.token}"
+      header 'Authorization', "Bearer #{@admin.create_api_key.token}"
       delete "/api/v1/users/#{@user.id}"
     end
 
@@ -167,38 +167,57 @@ describe Caminio::Sky::API::Users do
 
   describe "POST /change_password" do
 
-    before :each do
-      @user = create(:user, username: 'test', password: 'test-old')
-      header 'Authorization', "Bearer #{@user.create_access_token.token}"
-      post "/api/v1/users/change_password", old: 'test-old', new: 'test-new'
-    end
-
-    it { expect(last_response.status).to be == 201 }
-
-    describe "can log in with new password" do
+    describe "pass" do
 
       before :each do
-        post "/api/v1/auth", login: 'test', password: 'test-new'
+        @user = create(:user, username: 'test', password: 'test-old')
+        header 'Authorization', "Bearer #{@user.create_api_key.token}"
+        post "/api/v1/users/change_password", old: 'test-old', new: 'test-new'
       end
 
       it { expect(last_response.status).to be == 201 }
-      it { expect(json).to have_key(:access_token) }
-      it { expect(json.access_token).to have_key(:token) }
 
-    end
+      describe "can log in with new password" do
 
-    describe "can't log in with old password" do
+        before :each do
+          post "/api/v1/auth", login: 'test', password: 'test-new'
+        end
 
-      before :each do
-        post "/api/v1/auth", login: 'test', password: 'test-old'
+        it { expect(last_response.status).to be == 201 }
+        it { expect(json).to have_key(:api_key) }
+        it { expect(json.api_key).to have_key(:token) }
+
       end
 
-      it { expect(last_response.status).to be == 401 }
-      it { expect(json).not_to have_key(:access_token) }
+      describe "can't log in with old password" do
+
+        before :each do
+          post "/api/v1/auth", login: 'test', password: 'test-old'
+        end
+
+        it { expect(last_response.status).to be == 401 }
+        it { expect(json).not_to have_key(:api_key) }
+        it { expect(json).to have_key(:error) }
+        it { expect(json.error).to eq("InvalidCredentials") }
+
+      end
+    end
+
+    describe "fails" do
+
+      before :each do
+        @user = create(:user, username: 'test', password: 'test-old')
+        header 'Authorization', "Bearer #{@user.create_api_key.token}"
+        post "/api/v1/users/change_password", old: 'test-invalid', new: 'test-new'
+      end
+
+      it { expect(last_response.status).to be == 403 }
+
       it { expect(json).to have_key(:error) }
-      it { expect(json.error).to eq("InvalidCredentials") }
+      it { expect(json.error).to eq("WrongPassword") }
 
     end
+
   end
 
 end
