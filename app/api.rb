@@ -7,7 +7,7 @@ module Caminio
       class Root < Grape::API
 
         desc "caminio-Accounts user and license management"
-        prefix '/api/v1'
+        prefix '/v1'
         helpers API::Helper
 
         default_format :json

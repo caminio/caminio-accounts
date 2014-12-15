@@ -5,7 +5,7 @@ describe Caminio::Accounts::API::Users do
   describe "authentication" do
 
     before :each do
-      @url = '/api/v1/users'
+      @url = 'v1/users'
       @user = create(:user)
       @token = @user.create_api_key
     end
@@ -29,7 +29,7 @@ describe Caminio::Accounts::API::Users do
 
     before :each do
       @user = create(:user)
-      @url = "/api/v1/users/#{@user.id}"
+      @url = "v1/users/#{@user.id}"
       header 'Authorization', "Bearer #{@user.create_api_key.token}"
     end
 
@@ -42,7 +42,7 @@ describe Caminio::Accounts::API::Users do
     describe "json return properties" do
 
       before :each do
-        get "/api/v1/users/#{@user.id}"
+        get "v1/users/#{@user.id}"
       end
 
       it{ expect( json.user ).to have_key(:id) }
@@ -62,7 +62,7 @@ describe Caminio::Accounts::API::Users do
     before :each do
       @user = create(:user)
       header 'Authorization', "Bearer #{@user.create_api_key.token}"
-      get '/api/v1/users/current'
+      get 'v1/users/current'
     end
 
     it{ expect( json.user.id ).to be == @user.id }
@@ -76,7 +76,7 @@ describe Caminio::Accounts::API::Users do
       header 'Authorization', "Bearer #{@admin.create_api_key.token}"
     end
 
-    let(:url){ '/api/v1/users' }
+    let(:url){ 'v1/users' }
     let(:error_400){ 'user is missing, user[email] is missing' }
     let(:post_attr){ { user: { email: 'test@example.com', username: 'test' } } }
 
@@ -135,7 +135,7 @@ describe Caminio::Accounts::API::Users do
 
     describe "update" do
 
-      let(:url){ "/api/v1/users/#{@user.id}" }
+      let(:url){ "v1/users/#{@user.id}" }
 
       describe "email" do
 
@@ -157,7 +157,7 @@ describe Caminio::Accounts::API::Users do
       @admin = create(:user, role: 'admin')
       @user = create(:user)
       header 'Authorization', "Bearer #{@admin.create_api_key.token}"
-      delete "/api/v1/users/#{@user.id}"
+      delete "v1/users/#{@user.id}"
     end
 
     it{ expect( last_response.status ).to be == 200 }
@@ -172,7 +172,7 @@ describe Caminio::Accounts::API::Users do
       before :each do
         @user = create(:user, username: 'test', password: 'test-old')
         header 'Authorization', "Bearer #{@user.create_api_key.token}"
-        post "/api/v1/users/change_password", old: 'test-old', new: 'test-new'
+        post "v1/users/change_password", old: 'test-old', new: 'test-new'
       end
 
       it { expect(last_response.status).to be == 201 }
@@ -180,7 +180,7 @@ describe Caminio::Accounts::API::Users do
       describe "can log in with new password" do
 
         before :each do
-          post "/api/v1/auth", login: 'test', password: 'test-new'
+          post "v1/auth", login: 'test', password: 'test-new'
         end
 
         it { expect(last_response.status).to be == 201 }
@@ -192,7 +192,7 @@ describe Caminio::Accounts::API::Users do
       describe "can't log in with old password" do
 
         before :each do
-          post "/api/v1/auth", login: 'test', password: 'test-old'
+          post "v1/auth", login: 'test', password: 'test-old'
         end
 
         it { expect(last_response.status).to be == 401 }
@@ -208,7 +208,7 @@ describe Caminio::Accounts::API::Users do
       before :each do
         @user = create(:user, username: 'test', password: 'test-old')
         header 'Authorization', "Bearer #{@user.create_api_key.token}"
-        post "/api/v1/users/change_password", old: 'test-invalid', new: 'test-new'
+        post "v1/users/change_password", old: 'test-invalid', new: 'test-new'
       end
 
       it { expect(last_response.status).to be == 403 }
