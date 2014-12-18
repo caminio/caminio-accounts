@@ -1,4 +1,4 @@
-require 'caminio/Accounts'
+require 'caminio/accounts'
 require 'rack/cors'
 require 'request_store'
 
@@ -16,4 +16,4 @@ end
 
 Caminio::Accounts.init
 
-map('/') { run Caminio::Accounts::API::Root }
+map('/api') { run Caminio::Accounts::API::Root }
