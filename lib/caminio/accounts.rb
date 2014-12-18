@@ -4,6 +4,7 @@ require "active_model_serializers"
 require 'grape-active_model_serializers'
 
 require "caminio/accounts/version"
+require "caminio/accounts/rake"
 require "caminio/accounts/env"
 require "caminio/accounts/root"
 require "caminio/accounts/application"

@@ -84,6 +84,27 @@ class Caminio::Accounts::API::Users < Grape::API
     end
 
     #
+    # POST /signup
+    #
+    desc "signs up a new user account (if allowed in config)"
+    params do
+      requires :email, regexp: /.+@.+/
+      requires :password, regexp: /(?=.*[\w0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}/
+      optional :organization
+      optional :username
+    end
+    post '/signup' do
+      if Caminio::Organization.where( name: params.organization ).count > 0
+        return error!('OrganizationExists',409)
+      end
+      if Caminio::User.where( email: params.email ).count > 0
+        return error!('EmailExists',409)
+      end
+      user = Caminio::User.create( declared(params) )
+      user.create_api_key
+    end
+
+    #
     # PUT /:id
     #
     desc "update an existing user"
