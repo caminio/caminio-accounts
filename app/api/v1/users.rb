@@ -11,8 +11,6 @@ class Caminio::Accounts::API::Users < Grape::API
 
   end
 
-  before{ authenticate! }
-
   formatter :json, Grape::Formatter::ActiveModelSerializers
 
   resource :users do
@@ -22,6 +20,7 @@ class Caminio::Accounts::API::Users < Grape::API
     #
     desc "lists all users"
     get do
+      authenticate!
       Caminio::User.where({})
     end
 
@@ -30,6 +29,7 @@ class Caminio::Accounts::API::Users < Grape::API
     #
     desc "return user relation of current token"
     get '/current' do
+      authenticate!
       Caminio::User.find( @token.user_id )
     end
 
@@ -42,6 +42,7 @@ class Caminio::Accounts::API::Users < Grape::API
     end
     route_param :id do
       get do
+        authenticate!
         error!('InsufficientRights', 403) unless params.id == @token.user_id || @token.user.is_admin?
         Caminio::User.find_by(id: params.id)
       end
@@ -64,6 +65,7 @@ class Caminio::Accounts::API::Users < Grape::API
       end
     end
     post do
+      authenticate!
       Caminio::User.create( user_params )
     end
 
@@ -76,6 +78,7 @@ class Caminio::Accounts::API::Users < Grape::API
       requires :new, desc: "the new password"
     end
     post '/change_password' do
+      authenticate!
       user = Caminio::User.find( @token.user_id )
       return error!("WrongPassword",403) unless user.authenticate( params.old )
       user.password = params.new
@@ -100,7 +103,7 @@ class Caminio::Accounts::API::Users < Grape::API
       if Caminio::User.where( email: params.email ).count > 0
         return error!('EmailExists',409)
       end
-      user = Caminio::User.create( declared(params) )
+      user = Caminio::User.create( email: params.email, password: params.password, username: params.username )
       user.create_api_key
     end
 
@@ -120,6 +123,7 @@ class Caminio::Accounts::API::Users < Grape::API
       end
     end
     put '/:id' do
+      authenticate!
       Caminio::User.update( params.id, user_params )
       Caminio::User.find( params.id )
     end
@@ -130,6 +134,7 @@ class Caminio::Accounts::API::Users < Grape::API
     desc "delete an existing user"
     formatter :json, lambda{ |o,env| "{}" }
     delete '/:id' do
+      authenticate!
       Caminio::User.destroy( params.id )
     end
 

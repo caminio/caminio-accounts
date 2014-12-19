@@ -12,6 +12,12 @@ class Caminio::Accounts::Application
   def self.init_config
     @@config = Hashie::Mash.new
     db_config_file = Caminio::Accounts::Root.join( 'config', 'database.yml' )
+    
+    mail_config_file = Caminio::Accounts::Root.join( 'config', 'mail.yml' )
+    if File::exists? mail_config_file
+      @@config.mail = Hashie::Mash.new YAML::load_file( mail_config_file )[Caminio::Accounts::env]
+    end
+
     @@config.db = Hashie::Mash.new YAML::load_file( db_config_file )[Caminio::Accounts::env]
     @@config
   end

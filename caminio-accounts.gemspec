@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'active_model_serializers', '~>0.9.0'
   spec.add_dependency 'grape-active_model_serializers', '~> 1.3.1'
   spec.add_dependency 'i18n', '~> 0.6.11'
+  spec.add_dependency 'mail', '~> 2.6.3'
   
   spec.add_development_dependency 'guard-puma', '~> 0.3.1'
   spec.add_development_dependency 'rack-test', '~> 0.6.2'
